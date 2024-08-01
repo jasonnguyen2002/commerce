@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <br>
+        {% for list in listings %}
+            {% if not current_date >= list.listing_activeuntil %}
+                <div style="box-shadow: black 3px 2px 4px 3px; box-sizing: content-box; width: 94%; padding-bottom: 20px; display: inline-flex" >
+                    <div>
+                        {% if list.listing_imageurl %}
+                            <img src="{{list.listing_imageurl.url}}" width="400"    height="500" style="padding:10px;">
+                        {% endif %}
+                    </div>
+                    <div style="padding:10px">
+                        <div style="display: inline-block">
+                            <a href="{% url 'listing_page' title=list.listing_title  %}"><h1>{{list.listing_title}}</h1></a>
+                        </div>
+                        <div>
+                            <h3>Current Highest Bid: ${{list.listing_setPrice}} by {{list.listing_highestBidder}}</h3><br><br>
+                            <h6>Auction by: {{list.listing_author}}</h6>
+                            <h6>Created on: {{list.listing_datecreate}}</h6>
+                            <h6>Active Until: {{list.listing_activeuntil}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+            {% endif %}
+        {% endfor %}
+{% endblock %}

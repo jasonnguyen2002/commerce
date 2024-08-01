@@ -1,0 +1,85 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+    {{TITLE}}
+{% endblock %}
+
+{% block body %}
+{% if message %}
+    {{message}}
+{% endif %}
+    <div style="box-sizing: content-box; width: 94%;" class="form-inline">
+        {% if listing.listing_imageurl %}
+            <div>
+                <img src="{{listing.listing_imageurl.url}}" width="600" height="700" style="padding: 10px">
+            </div>
+        {% endif %}
+        <div class="container">
+        {% if user.is_authenticated %}
+            <form action="{% url 'listing_page' title=TITLE %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" id="watchlist" name="watchlist" value="Add to Watchlist" class="btn btn-secondary" style="float: right">
+            </form>
+        {% endif %}
+            <h1>{{listing.listing_title}}</h1>
+            <table class="table table-striped" style="width: 100%">
+                <tbody>
+                    <tr>
+                        <td><h6>Listing Author</h6></td>
+                        <td><h6>{{listing.listing_author}}</h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Created on</h6></td>
+                        <td><h6>{{listing.listing_datecreate}}</h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Active Until</h6></td>
+                        <td><h6>{{listing.listing_activeuntil}}</h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Type</h6></td>
+                        <td><h6><a href="{% url 'categories' category=listing.listing_category %}">{{listing.listing_category}}</a></a></h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Highest Bid</h6></td>
+                        <td><h6>{{listing.listing_setPrice}}</h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Highest Bidder</h6></td>
+                        <td><h6>{{listing.listing_highestBidder}}</h6></td>
+                    </tr>
+                    <tr>
+                        <td><h6>Description</h6></td>
+                        <td><h6>{{listing.listing_description}}</h6></td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if user.is_authenticated %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group" style="display: inline-block">
+                        <input type="number" autofocus class="form-control" name="bid" id="bid" min="0" max="9999999.99" count="0.01" stlye="width: 50%" placeholder="Enter Bid">
+                        <input type="submit" autofocus class="btn btn-primary" value="Submit Bid">
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <h2>Comments</h2>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea name="comments" id="comments" placeholder="Enter Comment" class="form-control" rows="4"></textarea><br>
+                <input type="submit" class="btn btn-primary" value="Add Comment">
+            </div>
+        </form>
+        <div class="media">
+            {% for user_comment in comments %}
+                <div class="media-body">
+                    <h5 class="media-body">{{user_comment.user.username}}</h5>
+                    <p>{{user_comment.comment}}</p><br>
+                </div>
+            {% endfor %}
+        </div>
+
+{% endblock %}

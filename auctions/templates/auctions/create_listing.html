@@ -1,0 +1,43 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Create Listing
+{% endblock %}
+
+{% block body %}
+    <h2>Create Listing</h2>
+    {% if message %}
+        {{message}}
+    {% endif %}
+    <form method="POST" action = "{% url 'create_listing' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Title:</label><br>
+            <input type="text" autofocus class="form-control" name="title" id="title" placeholder="Enter Auction Title" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Auction Image Url: </label>
+            <input type="file" class="btn btn-default" accept=".jpeg, .jpg, .png" required id="image" name="image" placeholder="Submit Auction Image">
+        </div>
+        <div class="form-group">
+            <label for="date">Set Expiration Date: </label>
+            <input type="date" class="form-control" placeholder="mm/dd/yy" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Set Auction Price:</label>
+            <input type="number" autofocus class="form-control" name="price" min="0" max="99999999.99"step=".01" id="price" required> 
+        </div>
+        <div class="form-group">
+            <label for="category">Select Category:</label>
+            <select name="category" placeholder="Select Auction Category" id="category" required>
+                {% for category in categories %}
+                    <option value="{{category}}">{{category}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Type Auction Description:</label><br>
+            <textarea placeholder="Enter Description Here" id="description" name="description" class="form-control" rows="5" required></textarea><br><br>
+        <input type="submit" class="btn btn-primary" value="Submit Listing">
+    </form>
+{% endblock %}
